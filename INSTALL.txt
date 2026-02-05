@@ -1,0 +1,25 @@
+VivekCarShop - Quick Installation
+=================================
+
+1. Create MySQL database and import:
+   - Open phpMyAdmin (http://localhost/phpmyadmin)
+   - Create database: vivek_carshop
+   - Import file: database/vivek_carshop.sql
+
+2. Configure database in application/config/database.php:
+   - username, password, database name
+
+3. Configure base URL in application/config/config.php if needed:
+   - Default: http://localhost/VivekCarShop/
+
+4. Set writable permissions for:
+   - application/cache/
+   - application/logs/
+   - uploads/ (and subfolders)
+
+5. Access:
+   - Website: http://localhost/VivekCarShop/
+   - Admin: http://localhost/VivekCarShop/admin
+   - Login: admin / admin123 (CHANGE AFTER FIRST LOGIN!)
+
+6. Configure WhatsApp in Admin > Settings
