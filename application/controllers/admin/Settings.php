@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Admin Settings - WhatsApp, SEO, Banners
  */
-class Settings extends Admin_Controller {
+class Settings extends CI_Controller {
 
     public function __construct() {
         parent::__construct();

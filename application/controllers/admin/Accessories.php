@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Admin Accessories Management
  */
-class Accessories extends Admin_Controller {
+class Accessories extends CI_Controller {
 
     public function __construct() {
         parent::__construct();

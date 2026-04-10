@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Admin Cars Management
  */
-class Cars extends Admin_Controller {
+class Cars extends CI_Controller {
 
     public function __construct() {
         parent::__construct();

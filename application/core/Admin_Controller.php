@@ -1,8 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-require_once APPPATH . 'core/MY_Controller.php';
-
 /**
  * Admin Base Controller - Requires admin authentication
  */
@@ -16,6 +14,5 @@ class Admin_Controller extends MY_Controller {
         }
         
         $this->data['admin'] = $this->session->userdata('admin_user');
-        $this->data['flash_success'] = $this->session->flashdata('success');
     }
 }

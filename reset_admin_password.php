@@ -8,7 +8,7 @@ define('BASEPATH', __DIR__ . '/system/');
 define('ENVIRONMENT', 'development');
 require_once __DIR__ . '/application/config/database.php';
 
-$new_password = isset($_GET['pass']) ? $_GET['pass'] : 'admin123';
+$new_password = isset($_GET['pass']) ? $_GET['pass'] : 'vivek@@admin9797';
 $conn = new mysqli(
     $db['default']['hostname'],
     $db['default']['username'],
@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 }
 
 $hash = password_hash($new_password, PASSWORD_DEFAULT);
-$conn->query("UPDATE admin_users SET password = '" . $conn->real_escape_string($hash) . "' WHERE username = 'admin'");
+$conn->query("UPDATE admin_users SET password = '".$conn->real_escape_string($hash)."'WHERE username = '".$conn->real_escape_string($username)."'");
 
 if ($conn->affected_rows > 0) {
     echo '<h2>Admin password reset successfully!</h2>';
