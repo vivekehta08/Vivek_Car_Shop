@@ -15,7 +15,7 @@ class MY_Controller extends CI_Controller {
         $this->load->model('City_model');
         
         // Global data for views
-        $this->data['site_name'] = $this->Setting_model->get('site_name') ?: 'VivekCarShop';
+        $this->data['site_name'] = $this->Setting_model->get('site_name') ?: 'V Auto Spare';
         $this->data['meta_keywords'] = $this->Setting_model->get('meta_keywords') ?: 'cars, buy car, sell car';
         $this->data['whatsapp_number'] = $this->Setting_model->get_whatsapp_number();
         $this->data['whatsapp_url'] = $this->Setting_model->get('whatsapp_number') 

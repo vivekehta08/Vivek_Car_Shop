@@ -1,4 +1,4 @@
-VivekCarShop - Quick Installation
+VAutoSpare - Quick Installation
 =================================
 
 1. Create MySQL database and import:
@@ -10,7 +10,7 @@ VivekCarShop - Quick Installation
    - username, password, database name
 
 3. Configure base URL in application/config/config.php if needed:
-   - Default: http://localhost/VivekCarShop/
+   - Default: http://localhost/VAutoSpare/
 
 4. Set writable permissions for:
    - application/cache/
@@ -18,8 +18,8 @@ VivekCarShop - Quick Installation
    - uploads/ (and subfolders)
 
 5. Access:
-   - Website: http://localhost/VivekCarShop/
-   - Admin: http://localhost/VivekCarShop/admin
+   - Website: http://localhost/VAutoSpare/
+   - Admin: http://localhost/VAutoSpare/admin
    - Login: admin / admin123 (CHANGE AFTER FIRST LOGIN!)
 
 6. Configure WhatsApp in Admin > Settings

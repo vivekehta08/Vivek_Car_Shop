@@ -1,4 +1,4 @@
-# VivekCarShop - Car Marketplace Website
+# VAutoSpare - Car Marketplace Website
 
 A full-featured car marketplace web application inspired by CarDekho, built with CodeIgniter 3, Bootstrap 5, and MySQL.
 
@@ -56,7 +56,7 @@ Edit `application/config/database.php`:
 
 Edit `application/config/config.php`:
 ```php
-$config['base_url'] = 'http://localhost/VivekCarShop/';
+$config['base_url'] = 'http://localhost/VAutoSpare/';
 // For production: 'https://yourdomain.com/'
 ```
 
@@ -70,12 +70,12 @@ Ensure these directories are writable:
 ### 5. Apache .htaccess
 
 If using Apache, ensure `mod_rewrite` is enabled. The `.htaccess` file is included.
-For XAMPP, the RewriteBase in `.htaccess` is set to `/VivekCarShop/`. Adjust if your path differs.
+For XAMPP, the RewriteBase in `.htaccess` is set to `/VAutoSpare/`. Adjust if your path differs.
 
 ### 6. Access the Application
 
-- **User Site**: http://localhost/VivekCarShop/
-- **Admin Panel**: http://localhost/VivekCarShop/admin
+- **User Site**: http://localhost/VAutoSpare/
+- **Admin Panel**: http://localhost/VAutoSpare/admin
 
 ## Default Credentials
 
@@ -99,7 +99,7 @@ The floating WhatsApp button and inquiry links will use this number.
 ## Folder Structure
 
 ```
-VivekCarShop/
+VAutoSpare/
 ├── application/
 │   ├── config/
 │   ├── controllers/

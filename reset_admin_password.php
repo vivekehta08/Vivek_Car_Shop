@@ -1,9 +1,4 @@
 <?php
-/**
- * Admin Password Reset - Run once then DELETE this file!
- * Access: http://localhost/VivekCarShop/reset_admin_password.php
- * Or with custom password: reset_admin_password.php?pass=yourpassword
- */
 define('BASEPATH', __DIR__ . '/system/');
 define('ENVIRONMENT', 'development');
 require_once __DIR__ . '/application/config/database.php';

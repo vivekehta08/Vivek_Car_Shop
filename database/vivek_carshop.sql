@@ -1,6 +1,3 @@
--- VivekCarShop Database Schema
--- Car Marketplace - Similar to CarDekho
--- Run this file in phpMyAdmin or MySQL CLI to create the database
 
 CREATE DATABASE IF NOT EXISTS vivek_carshop CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE vivek_carshop;
@@ -322,15 +319,15 @@ INSERT INTO settings (setting_key, setting_value, setting_type) VALUES
 ('whatsapp_number', '919876543210', 'text'),
 ('whatsapp_message', 'Hello, I am interested in this car: {item_name}. Please share more details.', 'text'),
 ('site_logo', '', 'image'),
-('site_name', 'VivekCarShop', 'text'),
-('meta_title', 'VivekCarShop - Buy & Sell Cars | Car Marketplace', 'text'),
+('site_name', 'VAutoSpare', 'text'),
+('meta_title', 'VAutoSpare - Buy & Sell Cars | Car Marketplace', 'text'),
 ('meta_description', 'Find your perfect car. Browse new and used cars, compare prices, and connect with sellers via WhatsApp.', 'text'),
 ('meta_keywords', 'cars, buy car, sell car, used cars, car marketplace, car dealer', 'text');
 
 -- Default admin user (password: admin123)
 -- Password hash for 'admin123' - CHANGE AFTER FIRST LOGIN!
 INSERT INTO admin_users (username, email, password, full_name, role) VALUES
-('admin', 'admin@vivekcarshop.com', '$2y$10$3uQh/c2g7Yajrn996duNp.pErDO6tu9AE1K.oldTYOK3GwrFu4iM2', 'Administrator', 'super_admin');
+('admin', 'admin@VAutoSpare.com', '$2y$10$3uQh/c2g7Yajrn996duNp.pErDO6tu9AE1K.oldTYOK3GwrFu4iM2', 'Administrator', 'super_admin');
 
 -- Sample cars
 INSERT INTO cars (brand_id, model_id, variant, year, fuel_type_id, transmission_id, mileage, price, city_id, description, seller_name, seller_phone, status, is_featured) VALUES

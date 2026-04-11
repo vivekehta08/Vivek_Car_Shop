@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="text-white mb-3"><?= html_escape($site_name ?? 'VivekCarShop') ?></h5>
+                    <h5 class="text-white mb-3"><?= html_escape($site_name ?? 'V Auto Spare') ?></h5>
                     <p>Your trusted car marketplace. Find the perfect car or sell yours with ease.</p>
                 </div>
                 <div class="col-md-2 mb-4">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <hr class="border-secondary">
-            <p class="text-center text-secondary mb-0">&copy; <?= date('Y') ?> <?= html_escape($site_name ?? 'VivekCarShop') ?>. All rights reserved.</p>
+            <p class="text-center text-secondary mb-0">&copy; <?= date('Y') ?> <?= html_escape($site_name ?? 'V Auto Spare') ?>. All rights reserved.</p>
         </div>
     </footer>
     <!-- WhatsApp Floating Button -->

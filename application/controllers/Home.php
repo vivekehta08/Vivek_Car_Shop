@@ -34,7 +34,7 @@ class Home extends MY_Controller {
             $p = $this->Accessory_image_model->get_primary($a->id);
             $a->primary_image = $p ? base_url($p->image_path) : 'https://via.placeholder.com/300x200?text=Accessory';
         }
-        $this->data['meta_title'] = $this->Setting_model->get('meta_title') ?: 'VivekCarShop - Buy & Sell Cars';
+        $this->data['meta_title'] = $this->Setting_model->get('meta_title') ?: 'V Auto Spare - Buy & Sell Cars';
         $this->data['meta_description'] = $this->Setting_model->get('meta_description') ?: 'Find your perfect car. Browse new and used cars.';
         
         $this->load->view('layout/header', $this->data);
