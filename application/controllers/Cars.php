@@ -70,6 +70,7 @@ class Cars extends MY_Controller {
     }
 
     public function detail($id, $slug = '') {
+        $this->load->helper('text');
         $car = $this->Car_model->get($id);
         if (!$car || $car->status != 'approved') {
             show_404();
@@ -89,8 +90,7 @@ class Cars extends MY_Controller {
         }
         
         $this->data['meta_title'] = $this->data['car_name'] . ' - ' . $this->data['site_name'];
-        $this->data['meta_description'] = character_limit(strip_tags($car->description), 160);
-        
+        $this->data['meta_description'] = character_limiter(strip_tags($car->description), 160);
         $this->load->view('layout/header', $this->data);
         $this->load->view('cars/detail', $this->data);
         $this->load->view('layout/footer', $this->data);

@@ -1,4 +1,14 @@
 <h1 class="h3 mb-4"><?= $car ? 'Edit' : 'Add' ?> Car</h1>
+<?php if ($this->session->flashdata('upload_errors')): ?>
+<div class="alert alert-warning">
+    <strong>Image upload issue:</strong>
+    <ul class="mb-0">
+        <?php foreach ($this->session->flashdata('upload_errors') as $err): ?>
+        <li><?= html_escape($err) ?></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>
 <?= form_open_multipart($car ? 'admin/cars/edit/'.$car->id : 'admin/cars/add') ?>
 <div class="row">
     <div class="col-md-6">
@@ -94,6 +104,13 @@
             <input type="file" name="images[]" class="form-control" multiple accept="image/*">
             <?php if (!empty($car_images)): ?>
             <p class="small text-muted mt-1">Current: <?= count($car_images) ?> image(s)</p>
+            <div class="d-flex flex-wrap gap-2 mt-2">
+                <?php foreach ($car_images as $img): ?>
+                <div class="border rounded overflow-hidden" style="width:90px; height:90px;">
+                    <img src="<?= base_url($img->image_path) ?>" alt="" style="width:100%; height:100%; object-fit:cover">
+                </div>
+                <?php endforeach; ?>
+            </div>
             <?php endif; ?>
         </div>
     </div>
@@ -102,13 +119,21 @@
 <a href="<?= base_url('admin/cars') ?>" class="btn btn-secondary">Cancel</a>
 <?= form_close() ?>
 <script>
-$('#brandId').change(function(){
-    var bid = $(this).val();
-    if(!bid){ $('#modelId').html('<option value="">Select brand first</option>'); return; }
-    $.get('<?= base_url("admin/cars/models_by_brand") ?>?brand_id='+bid, function(d){
-        var o = '<option value="">Select</option>';
-        $.each(d, function(i,m){ o += '<option value="'+m.id+'">'+m.name+'</option>'; });
-        $('#modelId').html(o);
+document.addEventListener('DOMContentLoaded', function(){
+    if (!window.jQuery) return;
+    var $ = window.jQuery;
+
+    $('#brandId').change(function(){
+        var bid = $(this).val();
+        if (!bid) {
+            $('#modelId').html('<option value="">Select brand first</option>');
+            return;
+        }
+        $.get('<?= base_url("admin/cars/models_by_brand") ?>?brand_id='+bid, function(d){
+            var o = '<option value="">Select</option>';
+            $.each(d, function(i,m){ o += '<option value="'+m.id+'">'+m.name+'</option>'; });
+            $('#modelId').html(o);
+        });
     });
 });
 </script>

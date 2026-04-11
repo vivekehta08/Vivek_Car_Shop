@@ -154,28 +154,51 @@ class Cars extends CI_Controller {
     }
 
     private function _handle_image_upload($car_id) {
-        if (empty($_FILES['images']['name'][0])) return;
+        if (empty($_FILES['images']['name'])) {
+            return;
+        }
+
+        $firstImage = is_array($_FILES['images']['name']) ? $_FILES['images']['name'][0] : $_FILES['images']['name'];
+        if (trim((string)$firstImage) === '') {
+            return;
+        }
         
         $upload_path = FCPATH . $this->config->item('car_images_path');
         if (!is_dir($upload_path)) mkdir($upload_path, 0755, TRUE);
         
-        $config['upload_path'] = $upload_path;
-        $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
-        $config['max_size'] = 5120;
+        $config = array(
+            'upload_path' => $upload_path,
+            'allowed_types' => 'gif|jpg|jpeg|png|webp',
+            'max_size' => 5120,
+            'encrypt_name' => TRUE,
+            'remove_spaces' => TRUE,
+        );
         $this->load->library('upload', $config);
         
         $files = $_FILES;
-        $cpt = is_array($_FILES['images']['name']) ? count($_FILES['images']['name']) : 0;
+        $cpt = is_array($files['images']['name']) ? count($files['images']['name']) : 0;
         $primary_set = $this->Car_image_model->get_primary($car_id) ? TRUE : FALSE;
+        $uploadErrors = array();
         
         for ($i = 0; $i < $cpt; $i++) {
-            $_FILES['images']['name'] = $files['images']['name'][$i];
-            $_FILES['images']['type'] = $files['images']['type'][$i];
-            $_FILES['images']['tmp_name'] = $files['images']['tmp_name'][$i];
-            $_FILES['images']['error'] = $files['images']['error'][$i];
-            $_FILES['images']['size'] = $files['images']['size'][$i];
-            
-            if ($_FILES['images']['error'][$i] == 0 && $this->upload->do_upload('images')) {
+            if (!isset($files['images']['name'][$i]) || trim($files['images']['name'][$i]) === '') {
+                continue;
+            }
+            if ($files['images']['error'][$i] !== 0) {
+                $uploadErrors[] = $files['images']['name'][$i] . ': upload error code ' . $files['images']['error'][$i];
+                continue;
+            }
+
+            $_FILES['image'] = array(
+                'name' => $files['images']['name'][$i],
+                'type' => $files['images']['type'][$i],
+                'tmp_name' => $files['images']['tmp_name'][$i],
+                'error' => $files['images']['error'][$i],
+                'size' => $files['images']['size'][$i],
+            );
+
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('image')) {
                 $ud = $this->upload->data();
                 $this->Car_image_model->add(array(
                     'car_id' => $car_id,
@@ -184,7 +207,13 @@ class Cars extends CI_Controller {
                     'display_order' => $i,
                 ));
                 $primary_set = TRUE;
+            } else {
+                $uploadErrors[] = $files['images']['name'][$i] . ': ' . $this->upload->display_errors('', '');
             }
+        }
+
+        if (!empty($uploadErrors)) {
+            $this->session->set_flashdata('upload_errors', $uploadErrors);
         }
     }
 }

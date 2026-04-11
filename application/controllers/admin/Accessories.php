@@ -120,37 +120,66 @@ class Accessories extends CI_Controller {
     }
 
     private function _handle_image_upload($accessory_id) {
-        if (empty($_FILES['images']['name'][0])) return;
+        if (empty($_FILES['images']['name'])) {
+            return;
+        }
+
+        $firstImage = is_array($_FILES['images']['name']) ? $_FILES['images']['name'][0] : $_FILES['images']['name'];
+        if (trim((string)$firstImage) === '') {
+            return;
+        }
         
         $upload_path = FCPATH . $this->config->item('accessory_images_path');
         if (!is_dir($upload_path)) mkdir($upload_path, 0755, TRUE);
         
-        $config['upload_path'] = $upload_path;
-        $config['allowed_types'] = 'gif|jpg|jpeg|png|webp';
-        $config['max_size'] = 5120;
+        $config = array(
+            'upload_path' => $upload_path,
+            'allowed_types' => 'gif|jpg|jpeg|png|webp',
+            'max_size' => 5120,
+            'encrypt_name' => TRUE,
+            'remove_spaces' => TRUE,
+        );
         $this->load->library('upload', $config);
         
         $files = $_FILES;
-        $cpt = is_array($_FILES['images']['name']) ? count($_FILES['images']['name']) : 0;
+        $cpt = is_array($files['images']['name']) ? count($files['images']['name']) : 0;
+        $primary_set = FALSE;
+        $uploadErrors = array();
         
         for ($i = 0; $i < $cpt; $i++) {
-            if ($_FILES['images']['error'][$i] != 0) continue;
-            $_FILES['img']['name'] = $files['images']['name'][$i];
-            $_FILES['img']['type'] = $files['images']['type'][$i];
-            $_FILES['img']['tmp_name'] = $files['images']['tmp_name'][$i];
-            $_FILES['img']['error'] = $files['images']['error'][$i];
-            $_FILES['img']['size'] = $files['images']['size'][$i];
-            
+            if (!isset($files['images']['name'][$i]) || trim($files['images']['name'][$i]) === '') {
+                continue;
+            }
+            if ($files['images']['error'][$i] !== 0) {
+                $uploadErrors[] = $files['images']['name'][$i] . ': upload error code ' . $files['images']['error'][$i];
+                continue;
+            }
+
+            $_FILES['image'] = array(
+                'name' => $files['images']['name'][$i],
+                'type' => $files['images']['type'][$i],
+                'tmp_name' => $files['images']['tmp_name'][$i],
+                'error' => $files['images']['error'][$i],
+                'size' => $files['images']['size'][$i],
+            );
+
             $this->upload->initialize($config);
-            if ($this->upload->do_upload('img')) {
+            if ($this->upload->do_upload('image')) {
                 $ud = $this->upload->data();
                 $this->Accessory_image_model->add(array(
                     'accessory_id' => $accessory_id,
                     'image_path' => $this->config->item('accessory_images_path') . $ud['file_name'],
-                    'is_primary' => $i == 0 ? 1 : 0,
+                    'is_primary' => !$primary_set ? 1 : 0,
                     'display_order' => $i,
                 ));
+                $primary_set = TRUE;
+            } else {
+                $uploadErrors[] = $files['images']['name'][$i] . ': ' . $this->upload->display_errors('', '');
             }
+        }
+
+        if (!empty($uploadErrors)) {
+            $this->session->set_flashdata('upload_errors', $uploadErrors);
         }
     }
 }

@@ -27,6 +27,15 @@
                 </button>
                 <?php endif; ?>
             </div>
+            <?php if (count($images) > 1): ?>
+            <div class="car-image-thumbnails d-flex gap-2 flex-row overflow-auto mt-3 pb-2" style="max-width:100%;">
+                <?php foreach ($images as $i => $img): ?>
+                <div class="thumbnail-item" style="flex:0 0 auto;">
+                    <img src="<?= base_url($img->image_path) ?>" class="img-thumbnail car-thumb <?= $i === 0 ? 'active border-primary' : '' ?>" style="width:120px;height:80px;object-fit:cover;cursor:pointer" data-index="<?= $i ?>" alt="">
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
             <?php else: ?>
             <img src="https://via.placeholder.com/800x450?text=No+Image" class="img-fluid rounded-3 mb-4" alt="">
             <?php endif; ?>
@@ -96,5 +105,19 @@ $('#btnSave').on('click', function(){
             btn.html((r.saved ? '<i class="bi bi-heart-fill text-danger"></i> Saved' : '<i class="bi bi-heart"></i> Save Car'));
         }
     }, 'json');
+});
+
+$(function(){
+    var gallery = $('#carGallery');
+    $('.car-thumb').on('click', function(){
+        var idx = $(this).data('index');
+        gallery.carousel(idx);
+        $('.car-thumb').removeClass('active');
+        $(this).addClass('active');
+    });
+    gallery.on('slid.bs.carousel', function(){
+        var idx = $(this).find('.carousel-item.active').index();
+        $('.car-thumb').removeClass('active').eq(idx).addClass('active');
+    });
 });
 </script>
