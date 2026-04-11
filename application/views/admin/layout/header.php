@@ -4,13 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= isset($title) ? html_escape($title) : 'Admin' ?> - V Auto Spare</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="<?= base_url('assets/image/favicon icon/favicon.ico') ?>" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= base_url('assets/image/favicon icon/favicon-16x16.png') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= base_url('assets/image/favicon icon/favicon-32x32.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url('assets/image/favicon icon/apple-touch-icon.png') ?>">
+    <link rel="icon" type="image/png" sizes="192x192" href="<?= base_url('assets/image/favicon icon/android-chrome-192x192.png') ?>">
+    <link rel="icon" type="image/png" sizes="512x512" href="<?= base_url('assets/image/favicon icon/android-chrome-512x512.png') ?>">
+    <link rel="manifest" href="<?= base_url('assets/image/favicon icon/site.webmanifest') ?>">
+    <meta name="theme-color" content="#ffffff">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .navbar-brand { display: inline-flex; align-items: center; gap: .5rem; }
+        .navbar-brand img { max-height: 30px; width: auto; }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="<?= base_url('admin/dashboard') ?>">V Auto Spare Admin</a>
+            <a class="navbar-brand d-flex align-items-center" href="<?= base_url('admin/dashboard') ?>">
+                <img src="<?= base_url('/assets/image/logo.jpeg') ?>" 
+                    alt="Logo" 
+                    style="width:30px; height:30px; object-fit:contain; margin-right:8px;">
+                V AutoSpare Admin
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
