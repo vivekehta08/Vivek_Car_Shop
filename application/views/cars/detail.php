@@ -96,28 +96,56 @@
     </div>
 </div>
 <script>
-$('#btnSave').on('click', function(){
-    var btn = $(this), carId = btn.data('car-id');
-    $.post('<?= base_url("auth/toggle_save") ?>', {car_id: carId}, function(r){
-        if(r.success){
-            btn.data('saved', r.saved ? 1 : 0);
-            btn.find('i').attr('class', 'bi bi-' + (r.saved ? 'heart-fill text-danger' : 'heart'));
-            btn.html((r.saved ? '<i class="bi bi-heart-fill text-danger"></i> Saved' : '<i class="bi bi-heart"></i> Save Car'));
+    document.addEventListener('DOMContentLoaded', function() {
+        var btnSave = document.getElementById('btnSave');
+        if (btnSave) {
+            btnSave.addEventListener('click', function() {
+                var carId = btnSave.getAttribute('data-car-id');
+                var formData = new URLSearchParams();
+                formData.append('car_id', carId);
+                fetch('<?= base_url("auth/toggle_save") ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData.toString(),
+                    credentials: 'same-origin'
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(r) {
+                    if (r.success) {
+                        btnSave.setAttribute('data-saved', r.saved ? '1' : '0');
+                        btnSave.innerHTML = r.saved ? '<i class="bi bi-heart-fill text-danger"></i> Saved' : '<i class="bi bi-heart"></i> Save Car';
+                    }
+                })
+                .catch(function() {
+                    console.error('Unable to save car.');
+                });
+            });
         }
-    }, 'json');
-});
 
-$(function(){
-    var gallery = $('#carGallery');
-    $('.car-thumb').on('click', function(){
-        var idx = $(this).data('index');
-        gallery.carousel(idx);
-        $('.car-thumb').removeClass('active');
-        $(this).addClass('active');
+        var gallery = document.getElementById('carGallery');
+        if (gallery) {
+            var thumbnails = document.querySelectorAll('.car-thumb');
+            thumbnails.forEach(function(thumb) {
+                thumb.addEventListener('click', function() {
+                    var idx = parseInt(thumb.getAttribute('data-index'), 10);
+                    var carousel = bootstrap.Carousel.getInstance(gallery) || new bootstrap.Carousel(gallery);
+                    carousel.to(idx);
+                    thumbnails.forEach(function(item) { item.classList.remove('active'); });
+                    thumb.classList.add('active');
+                });
+            });
+            gallery.addEventListener('slid.bs.carousel', function() {
+                var activeIndex = Array.prototype.findIndex.call(gallery.querySelectorAll('.carousel-item'), function(item) {
+                    return item.classList.contains('active');
+                });
+                thumbnails.forEach(function(item) { item.classList.remove('active'); });
+                if (thumbnails[activeIndex]) {
+                    thumbnails[activeIndex].classList.add('active');
+                }
+            });
+        }
     });
-    gallery.on('slid.bs.carousel', function(){
-        var idx = $(this).find('.carousel-item.active').index();
-        $('.car-thumb').removeClass('active').eq(idx).addClass('active');
-    });
-});
 </script>
+
