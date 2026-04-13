@@ -10,6 +10,10 @@ class Car_image_model extends CI_Model {
         parent::__construct();
     }
 
+    public function get($image_id) {
+        return $this->db->where('id', $image_id)->get('car_images')->row();
+    }
+
     public function get_by_car($car_id) {
         return $this->db->where('car_id', $car_id)
             ->order_by('is_primary', 'DESC')

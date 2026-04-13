@@ -15,7 +15,17 @@ class Car_model extends CI_Model {
      * Get cars with filters and pagination
      */
     public function get_list($filters = array(), $limit = 12, $offset = 0, $order_by = 'created_at', $order_dir = 'DESC') {
-        $this->db->select('cars.*, brands.name as brand_name, brands.slug as brand_slug, car_models.name as model_name, car_models.slug as model_slug, cities.name as city_name, fuel_types.name as fuel_type, transmission_types.name as transmission');
+
+        $this->db->select('cars.*,
+            brands.name as brand_name,
+            brands.slug as brand_slug,
+            car_models.name as model_name,
+            car_models.slug as model_slug,
+            cities.name as city_name,
+            fuel_types.name as fuel_type,
+            transmission_types.name as transmission
+        ');
+
         $this->db->from('cars');
         $this->db->join('brands', 'brands.id = cars.brand_id');
         $this->db->join('car_models', 'car_models.id = cars.model_id');
@@ -24,31 +34,39 @@ class Car_model extends CI_Model {
         $this->db->join('transmission_types', 'transmission_types.id = cars.transmission_id');
         $this->db->where('cars.status', 'approved');
 
-        // Apply filters
+        // Filters
         if (!empty($filters['brand_id'])) {
             $this->db->where('cars.brand_id', $filters['brand_id']);
         }
+
         if (!empty($filters['model_id'])) {
             $this->db->where('cars.model_id', $filters['model_id']);
         }
+
         if (!empty($filters['fuel_type_id'])) {
             $this->db->where('cars.fuel_type_id', $filters['fuel_type_id']);
         }
+
         if (!empty($filters['city_id'])) {
             $this->db->where('cars.city_id', $filters['city_id']);
         }
+
         if (!empty($filters['min_price'])) {
             $this->db->where('cars.price >=', $filters['min_price']);
         }
+
         if (!empty($filters['max_price'])) {
             $this->db->where('cars.price <=', $filters['max_price']);
         }
+
         if (!empty($filters['min_year'])) {
             $this->db->where('cars.year >=', $filters['min_year']);
         }
+
         if (!empty($filters['max_year'])) {
             $this->db->where('cars.year <=', $filters['max_year']);
         }
+
         if (!empty($filters['keyword'])) {
             $this->db->group_start();
             $this->db->like('cars.variant', $filters['keyword']);
@@ -57,12 +75,12 @@ class Car_model extends CI_Model {
             $this->db->or_like('car_models.name', $filters['keyword']);
             $this->db->group_end();
         }
-        if (isset($filters['is_featured']) && $filters['is_featured']) {
+
+        if (!empty($filters['is_featured'])) {
             $this->db->where('cars.is_featured', 1);
         }
 
         // Ordering
-        $allowed_orders = array('price' => 'ASC', 'price_desc' => 'DESC', 'year' => 'DESC', 'newest' => 'created_at', 'popular' => 'view_count');
         if ($order_by == 'price_low') {
             $this->db->order_by('cars.price', 'ASC');
         } elseif ($order_by == 'price_high') {
@@ -83,6 +101,7 @@ class Car_model extends CI_Model {
      * Count cars with filters
      */
     public function count_list($filters = array()) {
+
         $this->db->from('cars');
         $this->db->join('brands', 'brands.id = cars.brand_id');
         $this->db->join('car_models', 'car_models.id = cars.model_id');
@@ -90,6 +109,7 @@ class Car_model extends CI_Model {
 
         foreach ($filters as $key => $val) {
             if (empty($val)) continue;
+
             if ($key == 'brand_id') $this->db->where('cars.brand_id', $val);
             if ($key == 'model_id') $this->db->where('cars.model_id', $val);
             if ($key == 'fuel_type_id') $this->db->where('cars.fuel_type_id', $val);
@@ -98,6 +118,7 @@ class Car_model extends CI_Model {
             if ($key == 'max_price') $this->db->where('cars.price <=', $val);
             if ($key == 'min_year') $this->db->where('cars.year >=', $val);
             if ($key == 'max_year') $this->db->where('cars.year <=', $val);
+
             if ($key == 'keyword') {
                 $this->db->group_start();
                 $this->db->like('cars.variant', $val);
@@ -106,31 +127,43 @@ class Car_model extends CI_Model {
                 $this->db->or_like('car_models.name', $val);
                 $this->db->group_end();
             }
-            if ($key == 'is_featured') $this->db->where('cars.is_featured', 1);
+
+            if ($key == 'is_featured') {
+                $this->db->where('cars.is_featured', 1);
+            }
         }
+
         return $this->db->count_all_results();
     }
 
     public function get($id) {
-        $car = $this->db->select('cars.*, brands.name as brand_name, brands.slug as brand_slug, car_models.name as model_name, car_models.slug as model_slug, cities.name as city_name, fuel_types.name as fuel_type, transmission_types.name as transmission')
-            ->from('cars')
-            ->join('brands', 'brands.id = cars.brand_id')
-            ->join('car_models', 'car_models.id = cars.model_id')
-            ->join('cities', 'cities.id = cars.city_id')
-            ->join('fuel_types', 'fuel_types.id = cars.fuel_type_id')
-            ->join('transmission_types', 'transmission_types.id = cars.transmission_id')
-            ->where('cars.id', $id)
-            ->get()
-            ->row();
-        return $car;
+
+        return $this->db->select('cars.*,
+            brands.name as brand_name,
+            brands.slug as brand_slug,
+            car_models.name as model_name,
+            car_models.slug as model_slug,
+            cities.name as city_name,
+            fuel_types.name as fuel_type,
+            transmission_types.name as transmission
+        ')
+        ->from('cars')
+        ->join('brands', 'brands.id = cars.brand_id')
+        ->join('car_models', 'car_models.id = cars.model_id')
+        ->join('cities', 'cities.id = cars.city_id')
+        ->join('fuel_types', 'fuel_types.id = cars.fuel_type_id')
+        ->join('transmission_types', 'transmission_types.id = cars.transmission_id')
+        ->where('cars.id', $id)
+        ->get()
+        ->row();
     }
 
     public function get_featured($limit = 8) {
-        return $this->get_list(array('is_featured' => 1), $limit, 0, 'created_at', 'DESC');
+        return $this->get_list(['is_featured' => 1], $limit);
     }
 
     public function get_latest($limit = 8) {
-        return $this->get_list(array(), $limit, 0, 'newest', 'DESC');
+        return $this->get_list([], $limit, 0, 'newest');
     }
 
     public function increment_view($id) {
@@ -148,14 +181,23 @@ class Car_model extends CI_Model {
         return $this->db->where('id', $id)->update('cars', $data);
     }
 
-    public function delete($id) {
+    /**
+     * DELETE car + images
+     */
+    public function delete($id)
+    {
+        // delete car images first
+        $this->db->where('car_id', $id)->delete('car_images');
+
+        // delete car
         return $this->db->where('id', $id)->delete('cars');
     }
 
     /**
-     * Admin: Get all cars (including pending)
+     * Admin list
      */
     public function get_admin_list($filters = array(), $limit = 20, $offset = 0) {
+
         $this->db->select('cars.*, brands.name as brand_name, car_models.name as model_name, cities.name as city_name');
         $this->db->from('cars');
         $this->db->join('brands', 'brands.id = cars.brand_id');
@@ -165,19 +207,46 @@ class Car_model extends CI_Model {
         if (!empty($filters['status'])) {
             $this->db->where('cars.status', $filters['status']);
         }
+
         if (!empty($filters['brand_id'])) {
             $this->db->where('cars.brand_id', $filters['brand_id']);
         }
 
-        $this->db->order_by('cars.created_at', 'DESC');
+        // Sort admin car list in descending order (newest first)
+        $this->db->order_by('cars.id', 'DESC');
         $this->db->limit($limit, $offset);
+
         return $this->db->get()->result();
     }
 
     public function count_admin_list($filters = array()) {
+
         $this->db->from('cars');
-        if (!empty($filters['status'])) $this->db->where('status', $filters['status']);
-        if (!empty($filters['brand_id'])) $this->db->where('brand_id', $filters['brand_id']);
+
+        if (!empty($filters['status'])) {
+            $this->db->where('status', $filters['status']);
+        }
+
+        if (!empty($filters['brand_id'])) {
+            $this->db->where('brand_id', $filters['brand_id']);
+        }
+
         return $this->db->count_all_results();
     }
-}
+
+    /**
+     * Car images add
+     */
+    public function add($data)
+    {
+        return $this->db->insert('car_images', $data);
+    }
+
+    public function get_by_car($car_id)
+    {
+        return $this->db->where('car_id', $car_id)
+            ->order_by('display_order', 'ASC')
+            ->get('car_images')
+            ->result();
+    }
+} 

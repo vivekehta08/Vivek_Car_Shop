@@ -10,6 +10,10 @@ class Accessory_image_model extends CI_Model {
         parent::__construct();
     }
 
+    public function get($image_id) {
+        return $this->db->where('id', $image_id)->get('accessory_images')->row();
+    }
+
     public function get_by_accessory($accessory_id) {
         return $this->db->where('accessory_id', $accessory_id)
             ->order_by('is_primary', 'DESC')
